@@ -1,0 +1,9 @@
+{
+  "utterance": "describe yellowstone national park",
+  "intent_type": "ParkDescriptionIntent",
+  "intent": {
+    "Describe": "describe",
+    "ParkName": "yellowstone",
+    "National.Park": "national park"
+  }
+}
