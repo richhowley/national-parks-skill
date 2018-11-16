@@ -1,0 +1,22 @@
+{
+    "name": "National Parks",
+    "skillMetadata": {
+        "sections": [
+            {
+                "name": "NPS Issued Key",
+                "fields": [
+                    {
+                        "type": "label",
+                        "label": "Enter your <a href=\"https://www.nps.gov/subjects/developer/get-started.htm' target='_top'\">National Park Service</a> API key.  It's no cost and hassle free to get a key."
+                    },
+                    {
+                        "name": "api_key",
+                        "type": "text",
+                        "label": "API Key",
+                        "value": ""
+                    }
+                ]
+            }
+        ]
+    }
+}
