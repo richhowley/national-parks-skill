@@ -7,7 +7,7 @@
                 "fields": [
                     {
                         "type": "label",
-                        "label": "Enter your <a href=\"https://www.nps.gov/subjects/developer/get-started.htm' target='_top'\">National Park Service</a> API key.  It's no cost and hassle free to get a key."
+                        "label": "Enter your <a href=\"https://www.nps.gov/subjects/developer/get-started.htm'\">National Park Service</a> API key.  It's no cost and hassle free to get a key."
                     },
                     {
                         "name": "api_key",
