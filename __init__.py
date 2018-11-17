@@ -340,13 +340,13 @@ class NationalParksSkill(MycroftSkill):
 
     def on_websettings_changed(self):
       
-      LOGGER.info('National Parks ksill got new settings')
-      
       # try to read api key
       self.apiKey = self.settings.get('api_key')
       
+      LOGGER.info('National Parks sill api set to ' + self.apiKey)
+      
       # set key in NPS class
-      nps.setApiKey(self.apiKey)
+      self.nps.setApiKey(self.apiKey)
 
     # list the national parks in utah
     @intent_handler(IntentBuilder("ParkListIntent").require("List").require("National.Parks").require("Location").build())
