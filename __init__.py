@@ -434,8 +434,15 @@ class NationalParksSkill(MycroftSkill):
       # get qustion from nps class
       self.quizQuestion = self.nps.getQuizQuestion()
       
-      # ask question and wait for answer
-      self.speak_dialog("Ask.Quiz.Question", self.quizQuestion, expect_response=True)
+      # we either got a question or had a server error
+      if self.quizQuestion != None:
+      
+        # ask question and wait for answer
+        self.speak_dialog("Ask.Quiz.Question", self.quizQuestion, expect_response=True)
+        
+      else:
+        
+         self.speak_dialog("Error.calling.server")       
 
     @intent_handler(IntentBuilder('QuizAnswerIntent').require('QuizContext').build())
     @removes_context('QuizContext')
