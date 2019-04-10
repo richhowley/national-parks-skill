@@ -16,6 +16,8 @@ __author__ = 'richhowley'
 
 LOGGER = getLogger(__name__)
 
+API_KEY = 'k9RwPfwCIelpFrKpVWL04jR6BnUgzfQggFjjtdgB'
+
 # two letter codes are used by the API for 
 # looking up parks by state
 stateCodes =	{
@@ -77,32 +79,25 @@ stateCodes =	{
 #
 class NPS():
   
-  def __init__(self, apiKey):
+  def __init__(self):
     
     # error flag valid after API is called
     self.serverError = False
-    
-    self.apiKey = apiKey;
 
   def initialize(self):
     pass
-  
-  # api key setter, called if settings chaned via web
-  def setApiKey(self, key):
-    
-    self.apiKey = key
 
 
   # get data from NPS API at given endpoint with passed arguments
-  def _getData(self,endPoint, args=None):
-
+  def getData(self,endPoint, args=None):
+     
     retVal = None;
      
     # clear error flag
     self.serverError = False
      
     # format URL with end pint and API key
-    api_url = "https://developer.nps.gov/api/v1/{}?&api_key={}".format(endPoint,self.apiKey)
+    api_url = "https://developer.nps.gov/api/v1/{}?&api_key={}".format(endPoint,API_KEY)
     
     # add arguments if necessary
     if( args != None ):
@@ -110,12 +105,12 @@ class NPS():
  
     try:
       
-      # get requested data
+      # get list of parks
       headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:62.0) Gecko/20100101 Firefox/62.0'}
       r = requests.get(api_url, headers=headers)
       
       # check if we got any data before setting return value
-      retVal = r.json()['data'] if r.json()['total'] > 0 else None
+      retVal = r.json()['data'] if int(r.json()['total']) > 0 else None
       
     except:
       
@@ -124,25 +119,6 @@ class NPS():
     
     return retVal
      
-  # check for api key before calling nps server
-  def getData(self,endPoint, args=None):
-  
-    retVal = None;
-    
-    if self.apiKey == '':
-      
-      # set error flag
-      self.serverError = True
-      
-    else:
-   
-      
-      # we have an api key, try calling server
-      retVal = self._getData(endPoint, args)
-      
-    return retVal
-     
-  # get passed string ready for speaking
   def cleanString(self, str):
       
     # some park names (e.g. in Alaska) use ampersands for "and"
@@ -329,25 +305,9 @@ class NationalParksSkill(MycroftSkill):
   
     def __init__(self):
         super(NationalParksSkill, self).__init__(name="NationalParksSkill")
-        self.quizQuestion = None
-        
-        # read NPS api key from settings and pass to constructor
-        self.apiKey = self.settings.get('api_key')
-        self.nps = NPS(self.apiKey)
-
-        # watch for changes on HOME
-        self.settings.set_changed_callback(self.on_websettings_changed)
-
-    def on_websettings_changed(self):
-      
-      # try to read api key
-      self.apiKey = self.settings.get('api_key')
-      
-      LOGGER.info('National Parks sill api set to ' + self.apiKey)
-      
-      # set key in NPS class
-      self.nps.setApiKey(self.apiKey)
-
+        self.nps = NPS()
+        self.quizQuestion = None 
+ 
     # list the national parks in utah
     @intent_handler(IntentBuilder("ParkListIntent").require("List").require("National.Parks").require("Location").build())
     def handle_park_list_intent(self, message):
@@ -434,15 +394,8 @@ class NationalParksSkill(MycroftSkill):
       # get qustion from nps class
       self.quizQuestion = self.nps.getQuizQuestion()
       
-      # we either got a question or had a server error
-      if self.quizQuestion != None:
-      
-        # ask question and wait for answer
-        self.speak_dialog("Ask.Quiz.Question", self.quizQuestion, expect_response=True)
-        
-      else:
-        
-         self.speak_dialog("Error.calling.server")       
+      # ask question and wait for answer
+      self.speak_dialog("Ask.Quiz.Question", self.quizQuestion, expect_response=True)
 
     @intent_handler(IntentBuilder('QuizAnswerIntent').require('QuizContext').build())
     @removes_context('QuizContext')
