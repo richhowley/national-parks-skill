@@ -28,7 +28,7 @@ stateCodes =	{
   "california"  : "CA",
   "colorado"    : "CO",
   "connecticut" : "CT",
-  "celaware"    : "DE",
+  "delaware"    : "DE",
   "district of columbia" : "DC",
   "washington dc"        : "DC",
   "dc"                   : "DC",
@@ -40,6 +40,7 @@ stateCodes =	{
   "indiana"     : "IN",
   "iowa"        : "IA",
   "kansas"      : "KS",
+  "kentucky"    : "KY",
   "louisiana"   : "LA",
   "maine"       : "ME",
   "maryland"    : "MD",
@@ -309,15 +310,18 @@ class NationalParksSkill(MycroftSkill):
         self.quizQuestion = None 
  
     # list the national parks in utah
-    @intent_handler(IntentBuilder("ParkListIntent").require("List").require("National.Parks").require("Location").build())
+    @intent_handler(IntentBuilder("ParkListIntent").require("List").
+                    require("National.Parks").optionally("In").
+                    require("Location").build())
     def handle_park_list_intent(self, message):
       
         # state spoken
-        location =  message.data.get("Location")
-        
+        location = message.data.get("Location")
+
         # ask api for list of parks in state
         parks = self.nps.getParksByState(location)
         
+        # if we got a list of parks
         if parks != None:
         
           # format data for dialog

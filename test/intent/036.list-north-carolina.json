@@ -1,0 +1,9 @@
+{
+	"utterance": "list national parks in north carolina",
+	"intent_type": "ParkListIntent",
+	"intent": {
+		"List": "list",
+		"National.Parks": "national parks",
+		"Location": "north carolina"
+	}
+}

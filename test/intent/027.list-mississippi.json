@@ -1,0 +1,9 @@
+{
+	"utterance": "list national parks in mississippi",
+	"intent_type": "ParkListIntent",
+	"intent": {
+		"List": "list",
+		"National.Parks": "national parks",
+		"Location": "mississippi"
+	}
+}

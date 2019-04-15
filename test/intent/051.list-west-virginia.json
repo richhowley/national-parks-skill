@@ -1,0 +1,9 @@
+{
+	"utterance": "list national parks in west virginia",
+	"intent_type": "ParkListIntent",
+	"intent": {
+		"List": "list",
+		"National.Parks": "national parks",
+		"Location": "west virginia"
+	}
+}

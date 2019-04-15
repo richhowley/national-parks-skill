@@ -1,0 +1,9 @@
+{
+	"utterance": "list national parks in new hampshire",
+	"intent_type": "ParkListIntent",
+	"intent": {
+		"List": "list",
+		"National.Parks": "national parks",
+		"Location": "new hampshire"
+	}
+}
