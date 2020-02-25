@@ -337,7 +337,7 @@ class NationalParksSkill(MycroftSkill):
         self.nps = NPS(self.apiKey)
 
         # watch for changes on HOME
-        self.settings.set_changed_callback(self.on_websettings_changed)
+        self.settings_change_callback = self.on_websettings_changed
 
     def on_websettings_changed(self):
       
