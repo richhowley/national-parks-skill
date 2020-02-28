@@ -5,7 +5,6 @@
 from adapt.intent import IntentBuilder
 
 from mycroft.skills.core import MycroftSkill
-from mycroft.util.log import getLogger
 from mycroft import intent_handler
 from mycroft.skills.context import adds_context, removes_context
 import requests
@@ -14,7 +13,6 @@ import re
 
 __author__ = 'richhowley'
 
-LOGGER = getLogger(__name__)
 
 # two letter codes are used by the API for 
 # looking up parks by state
@@ -337,14 +335,14 @@ class NationalParksSkill(MycroftSkill):
         self.nps = NPS(self.apiKey)
 
         # watch for changes on HOME
-        self.settings.set_changed_callback(self.on_websettings_changed)
+        self.settings_change_callback = self.on_websettings_changed
 
     def on_websettings_changed(self):
       
       # try to read api key
       self.apiKey = self.settings.get('api_key')
       
-      LOGGER.info('National Parks sill api set to ' + self.apiKey)
+      self.log.info('National Parks skill api set to ' + self.apiKey)
       
       # set key in NPS class
       self.nps.setApiKey(self.apiKey)
