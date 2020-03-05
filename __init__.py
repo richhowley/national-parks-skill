@@ -5,7 +5,6 @@
 from adapt.intent import IntentBuilder
 
 from mycroft.skills.core import MycroftSkill
-from mycroft.util.log import getLogger
 from mycroft import intent_handler
 from mycroft.skills.context import adds_context, removes_context
 import requests
@@ -14,7 +13,6 @@ import re
 
 __author__ = 'richhowley'
 
-LOGGER = getLogger(__name__)
 
 # two letter codes are used by the API for 
 # looking up parks by state
@@ -26,7 +24,7 @@ stateCodes =	{
   "california"  : "CA",
   "colorado"    : "CO",
   "connecticut" : "CT",
-  "celaware"    : "DE",
+  "delaware"    : "DE",
   "district of columbia" : "DC",
   "washington dc"        : "DC",
   "dc"                   : "DC",
@@ -38,6 +36,7 @@ stateCodes =	{
   "indiana"     : "IN",
   "iowa"        : "IA",
   "kansas"      : "KS",
+  "kentucky"    : "KY",
   "louisiana"   : "LA",
   "maine"       : "ME",
   "maryland"    : "MD",
@@ -115,7 +114,7 @@ class NPS():
       r = requests.get(api_url, headers=headers)
       
       # check if we got any data before setting return value
-      retVal = r.json()['data'] if r.json()['total'] > 0 else None
+      retVal = r.json()['data'] if int(r.json()['total']) > 0 else None
       
     except:
       
@@ -336,20 +335,22 @@ class NationalParksSkill(MycroftSkill):
         self.nps = NPS(self.apiKey)
 
         # watch for changes on HOME
-        self.settings.set_changed_callback(self.on_websettings_changed)
+        self.settings_change_callback = self.on_websettings_changed
 
     def on_websettings_changed(self):
       
       # try to read api key
       self.apiKey = self.settings.get('api_key')
       
-      LOGGER.info('National Parks sill api set to ' + self.apiKey)
+      self.log.info('National Parks skill api set to ' + self.apiKey)
       
       # set key in NPS class
       self.nps.setApiKey(self.apiKey)
 
     # list the national parks in utah
-    @intent_handler(IntentBuilder("ParkListIntent").require("List").require("National.Parks").require("Location").build())
+    @intent_handler(IntentBuilder("ParkListIntent").require("List").
+                    require("National.Parks").optionally("In").
+                    require("Location").build())
     def handle_park_list_intent(self, message):
       
         # state spoken
@@ -358,6 +359,7 @@ class NationalParksSkill(MycroftSkill):
         # ask api for list of parks in state
         parks = self.nps.getParksByState(location)
         
+        # if we got a list of parks
         if parks != None:
         
           # format data for dialog
@@ -434,8 +436,15 @@ class NationalParksSkill(MycroftSkill):
       # get qustion from nps class
       self.quizQuestion = self.nps.getQuizQuestion()
       
-      # ask question and wait for answer
-      self.speak_dialog("Ask.Quiz.Question", self.quizQuestion, expect_response=True)
+      # we either got a question or had a server error
+      if self.quizQuestion != None:
+      
+        # ask question and wait for answer
+        self.speak_dialog("Ask.Quiz.Question", self.quizQuestion, expect_response=True)
+        
+      else:
+        
+         self.speak_dialog("Error.calling.server")       
 
     @intent_handler(IntentBuilder('QuizAnswerIntent').require('QuizContext').build())
     @removes_context('QuizContext')

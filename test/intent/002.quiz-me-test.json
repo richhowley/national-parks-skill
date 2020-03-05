@@ -1,5 +1,4 @@
 {
   "utterance": "quiz me on national parks",
-  "intent_type": "QuizIntent",
-  "expected_dialog": "Ask.Quiz.Question"
+  "intent_type": "QuizIntent"
 }

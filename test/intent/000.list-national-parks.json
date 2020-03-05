@@ -1,9 +1,11 @@
 {
-  "utterance": "list national parks in nevada",
+  "utterance": "list national parks in washington dc ",
   "intent_type": "ParkListIntent",
   "intent": {
     "List": "list",
     "National.Parks": "national parks",
-    "Location": "nevada"
+    "Location": "washington dc"
   }
 }
+
+

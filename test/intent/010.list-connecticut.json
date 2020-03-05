@@ -1,0 +1,9 @@
+{
+	"utterance": "list national parks in connecticut",
+	"intent_type": "ParkListIntent",
+	"intent": {
+		"List": "list",
+		"National.Parks": "national parks",
+		"Location": "connecticut"
+	}
+}

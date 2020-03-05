@@ -1,0 +1,9 @@
+{
+	"utterance": "list national parks in arizona",
+	"intent_type": "ParkListIntent",
+	"intent": {
+		"List": "list",
+		"National.Parks": "national parks",
+		"Location": "arizona"
+	}
+}

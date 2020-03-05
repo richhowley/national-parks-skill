@@ -1,0 +1,9 @@
+{
+	"utterance": "list national parks in arkansas",
+	"intent_type": "ParkListIntent",
+	"intent": {
+		"List": "list",
+		"National.Parks": "national parks",
+		"Location": "arkansas"
+	}
+}
